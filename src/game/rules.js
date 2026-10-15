@@ -25,3 +25,15 @@ export function reward({ rarity = 0, damage = 1, combo = 1, event = null, destro
 export function hitTest(blocks, x, y) { return [...blocks].reverse().find(b => !b.dead && Math.abs(x - b.x) < b.w * .43 && Math.abs(y - b.y) < b.h * .43); }
 export function targets(blocks, floor = 505) { return blocks.filter(b => !b.dead).map((b, i) => ({ id: b.id, y: floor - i * 105 })); }
 export const money = n => '$' + Math.round(n).toLocaleString('en-US');
+
+export function specialBlock(roll = Math.random()) {
+  return roll < .025 ? 'jackpot' : roll < .085 ? 'lucky' : roll < .16 ? 'mystery' : null;
+}
+export function specialReward(kind, roll = Math.random()) {
+  if (kind === 'jackpot') return {amount:2500, label:'JACKPOT SMASH', type:'jackpot'};
+  if (kind === 'lucky') return {amount:250, label:'LUCKY BLOCK', type:'lucky'};
+  if (kind === 'mystery') return roll < .5
+    ? {amount:500, label:'MYSTERY +$500', type:'mystery'}
+    : {amount:0, label:'GOLDEN HAMMER', type:'golden', golden:true};
+  return {amount:0};
+}
